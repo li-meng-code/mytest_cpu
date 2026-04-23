@@ -1,0 +1,79 @@
+mainmenu "NPC Configuration Menu"
+
+source "csrc/memory/Kconfig"
+
+choice
+  prompt "Base ISA"
+  default ISA_riscv
+config ISA_riscv
+  bool "riscv"
+endchoice
+
+config ISA
+  string
+  default "riscv32" if ISA_riscv
+  default "none"
+  
+
+
+menu "Testing and debugging"
+config TRACE
+  bool "enable tracer"
+  default y
+
+config TRACE_START
+  depends on TRACE
+  int "When tracing is enabled (unit: number of instructions)"
+  default 0
+
+config TRACE_END
+  depends on TRACE
+  int "When tracing is disabled (unit: number of instructions)"
+  default 10000
+
+config ITRACE
+  depends on TRACE
+  bool "Enable instruction tracer"
+  default y
+
+config ITRACE_COND 
+  depends on ITRACE
+  string "Only trace instructions when the condition is true"
+  default "true"
+
+# TARGET_NATIVE_ELF: Only takes effects when nemu is built to run on linux. 
+# ENGINE_INTERPRETER: Only takes effects when nemu is built as a interpreter (no hardware acceleration).
+config MTRACE
+  depends on TRACE
+  bool "Enable memory tracer"
+  default n 
+
+config FTRACE
+  depends on TRACE
+  bool "Enbable funciton call tracer"
+  default n
+
+config FTRACE_INDENT
+  depends on FTRACE
+  bool "Enable indent output of ftrace"
+  default y
+
+config DIFFTEST
+  bool "Enable differential testing"
+  default n
+  help
+    "Enable differential testing with a reference design.
+    Note that this will significantly reduce the performance of NEMU."
+
+config WAVE_TRACE
+  depends on TRACE
+  bool "Enabling wave tracing"
+  default n
+
+config WATCHPOINT
+  bool "Enable watchpoint"
+  default y
+  help
+    "Enable watchpoint evaluation of sdb."
+
+endmenu

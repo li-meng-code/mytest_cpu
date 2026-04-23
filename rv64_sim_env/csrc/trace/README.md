@@ -1,0 +1,1 @@
+# Now the ftrace module is only compatible for riscv-32-nemu
